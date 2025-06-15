@@ -1,0 +1,288 @@
+openapi: 3.1.0
+info:
+  title: Player Account Management (PAM) API
+  description: API for managing player accounts and authentication
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+    description: Base API path
+
+paths:
+  /pam/signup:
+    post:
+      summary: Sign up a new player
+      description: Create a new player account with the provided credentials
+      operationId: signupPlayer
+      tags:
+        - Player Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: Player account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerResponse'
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Username or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pam/signin:
+    post:
+      summary: Sign in a player
+      description: Authenticate a player and receive an access token
+      operationId: signinPlayer
+      tags:
+        - Player Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninRequest'
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Account is inactive or banned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pam/players/me:
+    get:
+      summary: Get current player info
+      description: Retrieve detailed information about the currently authenticated player
+      operationId: getCurrentPlayer
+      tags:
+        - Player Account
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Player information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerResponse'
+        '401':
+          description: Unauthorized - invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    SignupRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - brand
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Unique username for the player
+          example: "player123"
+        email:
+          type: string
+          format: email
+          description: Player's email address
+          example: "player@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: Player's password (will be hashed)
+          example: "securePassword123"
+        brand:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The brand the player belongs to
+          example: "casino-brand-1"
+
+    SigninRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: Player's email address
+          example: "player@example.com"
+        password:
+          type: string
+          format: password
+          description: Player's password
+          example: "securePassword123"
+
+    SigninResponse:
+      type: object
+      required:
+        - accessToken
+        - tokenType
+        - expiresIn
+        - player
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: "eyJhbGciOiJIUzI1NiIs..."
+        tokenType:
+          type: string
+          description: Type of the token
+          example: "Bearer"
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds
+          example: 3600
+        player:
+          $ref: '#/components/schemas/PlayerResponse'
+
+    PlayerResponse:
+      type: object
+      required:
+        - id
+        - username
+        - email
+        - brand
+        - status
+        - emailVerified
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the player
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        username:
+          type: string
+          description: Player's username
+          example: "player123"
+        email:
+          type: string
+          format: email
+          description: Player's email address
+          example: "player@example.com"
+        brand:
+          type: string
+          description: The brand the player belongs to
+          example: "casino-brand-1"
+        status:
+          type: string
+          enum: [active, inactive, banned]
+          description: Current status of the player account
+          example: "active"
+        emailVerified:
+          type: boolean
+          description: Whether the email has been verified
+          example: false
+        lastLoginAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp of the last login
+          example: "2024-03-25T12:00:00Z"
+        createdAt:
+          type: string
+          format: date-time
+          description: When the account was created
+          example: "2024-03-25T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: When the account was last updated
+          example: "2024-03-25T10:30:00Z"
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "INVALID_INPUT"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid username format"
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error details
+          example:
+            field: "username"
+            constraint: "pattern"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
