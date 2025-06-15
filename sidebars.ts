@@ -13,57 +13,40 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Documentation sidebar
-  tutorialSidebar: [
+  docs: [
+    {
+      type: 'doc',
+      id: 'getting-started/index',
+      label: 'Getting Started',
+    },
+    {
+      type: 'category',
+      label: 'OpenAPI References',
+      items: [
+        {
+          type: 'doc',
+          id: 'openapis/pam',
+          label: 'PAM',
+        },
+      ],
+    },
     {
       type: 'category',
       label: 'Environments',
       items: [
         {
           type: 'doc',
-          id: 'environment/staging',
+          id: 'environments/staging',
           label: 'Staging',
         },
       ],
     },
-  ],
-
-  // API sidebar configuration
-  apiSidebar: [
     {
-      type: 'category',
-      label: 'OpenAPI',
-      link: {
-        type: 'doc',
-        id: 'api/index',
-      },
-      items: [
-        {
-          type: 'link',
-          label: 'PAM',
-          href: '/api/pam',
-        },
-        {
-          type: 'link',
-          label: 'Backoffice',
-          href: '/api/bo',
-        },
-      ],
+      type: 'doc',
+      id: 'changelog',
+      label: 'Changelog',
     },
   ],
-
-  // But you can create a sidebar manually
-  /*
-  tutorialSidebar: [
-    'intro',
-    'hello',
-    {
-      type: 'category',
-      label: 'Tutorial',
-      items: ['tutorial-basics/create-a-document'],
-    },
-  ],
-   */
 };
 
 export default sidebars;
