@@ -15,12 +15,12 @@ function HomepageHeader() {
           {siteConfig.title}
         </h1>
         <p className={styles.heroSubtitle}>
-          Secure. Scalable. Structured.
+          Stable. Robust. Scalable.
         </p>
         <div className={styles.buttons}>
           <Link
             className="button button--primary button--lg"
-            to="/docs/intro">
+            to="/docs/getting-started">
             Get Started →
           </Link>
         </div>
