@@ -226,18 +226,11 @@ components:
     PlayerResponse:
       type: object
       required:
-        - id
         - username
         - email
         - status
         - emailVerified
-        - createdAt
-        - updatedAt
       properties:
-        id:
-          type: string
-          description: Unique identifier for the player
-          example: "plr_15LGOQWBGD6YEXGJZIOJSI"
         username:
           type: string
           description: Player's username
@@ -249,29 +242,13 @@ components:
           example: "player@example.com"
         status:
           type: string
-          enum: [active, inactive, banned]
+          enum: [active, banned]
           description: Current status of the player account
           example: "active"
         emailVerified:
           type: boolean
           description: Whether the email has been verified
           example: false
-        lastLoginAt:
-          type: string
-          format: date-time
-          x-nullable: true
-          description: Timestamp of the last login
-          example: "2024-03-25T12:00:00Z"
-        createdAt:
-          type: string
-          format: date-time
-          description: When the account was created
-          example: "2024-03-25T10:30:00Z"
-        updatedAt:
-          type: string
-          format: date-time
-          description: When the account was last updated
-          example: "2024-03-25T10:30:00Z"
 
     Error:
       type: object
