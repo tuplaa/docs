@@ -1,15 +1,36 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: Player Account Management (PAM) API
   description: API for managing player accounts and authentication
   version: 1.0.0
 
 servers:
-  - url: /api/v1
+  - url: /
     description: Base API path
 
 paths:
-  /pam/signup:
+  /v1/openapi.yaml:
+    get:
+      summary: Get OpenAPI specification
+      description: Returns the OpenAPI specification in YAML format
+      operationId: getOpenAPISpec
+      tags:
+        - API Documentation
+      responses:
+        '200':
+          description: OpenAPI specification
+          content:
+            application/yaml:
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/signup:
     post:
       summary: Sign up a new player
       description: Create a new player account with the provided credentials
@@ -48,7 +69,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /pam/signin:
+  /v1/signin:
     post:
       summary: Sign in a player
       description: Authenticate a player and receive an access token
@@ -93,7 +114,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /pam/players/me:
+  /v1/players/me:
     get:
       summary: Get current player info
       description: Retrieve detailed information about the currently authenticated player
@@ -110,7 +131,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PlayerResponse'
         '401':
-          description: Unauthorized - invalid or missing token
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -129,6 +150,12 @@ paths:
                 $ref: '#/components/schemas/Error'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     SignupRequest:
       type: object
@@ -136,7 +163,6 @@ components:
         - username
         - email
         - password
-        - brand
       properties:
         username:
           type: string
@@ -156,12 +182,6 @@ components:
           minLength: 8
           description: Player's password (will be hashed)
           example: "securePassword123"
-        brand:
-          type: string
-          minLength: 1
-          maxLength: 50
-          description: The brand the player belongs to
-          example: "casino-brand-1"
 
     SigninRequest:
       type: object
@@ -209,7 +229,6 @@ components:
         - id
         - username
         - email
-        - brand
         - status
         - emailVerified
         - createdAt
@@ -217,9 +236,8 @@ components:
       properties:
         id:
           type: string
-          format: uuid
           description: Unique identifier for the player
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: "plr_15LGOQWBGD6YEXGJZIOJSI"
         username:
           type: string
           description: Player's username
@@ -229,10 +247,6 @@ components:
           format: email
           description: Player's email address
           example: "player@example.com"
-        brand:
-          type: string
-          description: The brand the player belongs to
-          example: "casino-brand-1"
         status:
           type: string
           enum: [active, inactive, banned]
@@ -245,7 +259,7 @@ components:
         lastLoginAt:
           type: string
           format: date-time
-          nullable: true
+          x-nullable: true
           description: Timestamp of the last login
           example: "2024-03-25T12:00:00Z"
         createdAt:
@@ -268,21 +282,15 @@ components:
         code:
           type: string
           description: Error code
-          example: "INVALID_INPUT"
+          example: "invalid_request"
         message:
           type: string
           description: Human-readable error message
-          example: "Invalid username format"
+          example: "Invalid request payload"
         details:
           type: object
-          additionalProperties: true
           description: Additional error details
-          example:
-            field: "username"
-            constraint: "pattern"
+          additionalProperties: true
 
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+security:
+  - bearerAuth: []
