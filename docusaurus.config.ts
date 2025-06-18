@@ -16,7 +16,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.novaplatform.com',
+  url: 'https://docs.nvp.tools',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -57,7 +57,7 @@ const config: Config = {
         openapi: {
           // Folder to scan for *.pam.openapi.yaml files
           path: 'openapi',
-          routeBasePath: '/api',
+          routeBasePath: '/apiold',
         },
         specs: [
           // Optionally provide individual files/urls to load
@@ -67,12 +67,12 @@ const config: Config = {
           //   id: 'pam',
           //   route: '/api/pam',
           // // },
-          // // // You can also pass it an OpenAPI spec URL
-          // // {
-          // //   spec: 'https://redocly.github.io/redoc/openapi.yaml',
-          // //   id: 'from-remote-file',
-          // //   route: '/api/from-remote-file',
-          // },
+          // // You can also pass it an OpenAPI spec URL
+          {
+            spec: 'https://pam.demo1.nvp.tools/v1/openapi.yaml',
+            id: 'from-remote-pam',
+            route: '/api/pam2',
+          },
         ],
 
         // Theme Options for modifying how redoc renders them

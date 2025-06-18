@@ -42,6 +42,7 @@ Please be aware of the following rate limits:
 ## Next Steps
 
 - Check out our [API Reference](/docs/openapis/pam) for detailed endpoint documentation
+- Check out CURL scenario [CURL scenario](/docs/getting-started/curl-scenario) for a smoke test
 - Review the [Staging Environment](/docs/environments/staging) for testing your integration
 - Stay updated with our [Changelog](/docs/changelog) for the latest changes and improvements
 
