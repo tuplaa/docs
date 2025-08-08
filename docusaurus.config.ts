@@ -73,6 +73,11 @@ const config: Config = {
             id: 'from-remote-pam',
             route: '/api/pam2',
           },
+          {
+            spec: 'https://boapi.stage.nvp.tools/v1/openapi.yaml',
+            id: 'from-remote-boapi',
+            route: '/api/boapi',
+          },
         ],
 
         // Theme Options for modifying how redoc renders them
