@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Documentation
 
-Welcome to the NVP Platform documentation.
+Welcome to the Platform documentation.
 
 ## OpenAPIs
 

@@ -4,11 +4,11 @@ sidebar_position: 1
 
 # Getting Started
 
-Welcome to the NVP Platform documentation. This guide will help you get started with integrating our services into your application.
+Welcome to the Platform documentation. This guide will help you get started with integrating our services into your application.
 
 ## Authentication
 
-All player-related resources in the NVP Platform are protected and require authentication. Authentication is handled through Bearer token authorization.
+All player-related resources in the Platform are protected and require authentication. Authentication is handled through Bearer token authorization.
 
 ### How to Authenticate
 
@@ -30,9 +30,9 @@ All player-related resources in the NVP Platform are protected and require authe
 We provide different environments for development and testing:
 
 - **Staging**: For testing and development
-  - Web application: https://demo1.nvp.tools
-  - API Base URL: https://pam.demo1.nvp.tools
-  - Available brand: demo1
+  - Web application: https://tpl.4478.io
+  - API Base URL: https://pam.tpl.4478.io
+  - Available brand: tpl
 
 ## Rate Limits
 

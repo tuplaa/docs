@@ -32,7 +32,7 @@ function HomepageHeader() {
 export default function Home(): ReactNode {
   return (
     <Layout
-      title="NVP Platform"
+      title="Platform"
       description="Secure and scalable platform for player management and administration">
       <HomepageHeader />
     </Layout>

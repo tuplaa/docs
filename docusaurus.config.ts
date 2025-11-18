@@ -6,7 +6,7 @@ import type * as Redocusaurus from 'redocusaurus';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'NVP Platform documentation',
+  title: 'Platform documentation',
   tagline: 'stable secure transparent',
   favicon: 'img/favicon.ico',
 
@@ -16,7 +16,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.nvp.tools',
+  url: 'https://docs.4478.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -69,31 +69,31 @@ const config: Config = {
           // // },
           // // You can also pass it an OpenAPI spec URL
           {
-            spec: 'https://pam.demo1.nvp.tools/v1/openapi.yaml',
+            spec: 'https://pam.tpl.4478.io/v1/openapi.yaml',
             id: 'from-remote-pam',
             route: '/api/pam2',
           },
-          {
-            spec: 'https://boapi.stage.nvp.tools/v1/openapi.yaml',
-            id: 'from-remote-boapi',
-            route: '/api/boapi',
-          },
+          // {
+          //   spec: 'https://boapi.stage.4478.io/v1/openapi.yaml',
+          //   id: 'from-remote-boapi',
+          //   route: '/api/boapi',
+          // },
         ],
 
         // Theme Options for modifying how redoc renders them
         theme: {
           // Change with your site colors
           primaryColor: '#1890ff',
+          hideInternal: true, // This will hide endpoints marked with x-internal: true
         },
       },
     ] satisfies Redocusaurus.PresetEntry,
   ],
-
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'NVP Platform',
+      title: 'Platform',
       items: [
         {
           type: 'docSidebar',
@@ -105,7 +105,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      copyright: `Copyright © ${new Date().getFullYear()} NVP Platform.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Platform.`,
     },
     prism: {
       theme: prismThemes.github,

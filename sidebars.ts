@@ -42,6 +42,17 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Usage',
+      items: [
+        {
+          type: 'doc',
+          id: 'environments/cashier',
+          label: 'Cashier',
+        },
+      ],
+    },
+    {
       type: 'doc',
       id: 'changelog',
       label: 'Changelog',
