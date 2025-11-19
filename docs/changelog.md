@@ -6,7 +6,7 @@ sidebar_position: 3
 
 ## 2025
 
-### June 2025
-- Initial release of PAM API 
-- V1 Sign-up & Sign-in
+### November 2025
+- Signup with email, Signup by personal code 
+- Signin with email, Signing with token
 - Staging environment setup 
