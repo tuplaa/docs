@@ -53,6 +53,17 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Discovery',
+      items: [
+        {
+          type: 'doc',
+          id: 'discovery/livechat_rd',
+          label: 'Livechat R&D',
+        },
+      ],
+    },
+    {
       type: 'doc',
       id: 'changelog',
       label: 'Changelog',
