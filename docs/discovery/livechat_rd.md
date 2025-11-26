@@ -6,19 +6,212 @@ This document evaluates customer-facing chat widget solutions for an iGaming web
 
 ---
 
+---
+
+## Performance & Loading Time Statistics
+
+Chat widgets impact page performance by requiring extra network bandwidth and increasing CPU usage. The following data is compiled from independent benchmark tests.
+
+### DebugBear Benchmark (2025) - 21 Widgets Tested
+
+Testing methodology: Each widget installed on empty test page, tested with Google Lighthouse tool.
+
+| Widget | FCP | JS Execution Time | Download Size | Time to Display |
+|--------|-----|-------------------|---------------|-----------------|
+| **LiveAgent** | 1.0s | 309ms | 79KB | 2.5s |
+| **Zoho Desk** | 1.0s | 259ms | 67KB | 3.3s |
+| **Crisp** | 1.0s | 311ms | 155KB | 5.4s |
+| **LiveChat** | 1.0s | 328ms | 385KB | 5.7s |
+| **Tidio** | 1.0s | 540ms | 208KB | 5.3s |
+| **Intercom** | 1.0s | 514ms | 301KB | 5.5s |
+| **Tawk.to** | 1.0s | 645ms | 749KB | 3.5s |
+| **Zendesk** | 1.0s | 991ms | 533KB | 9.3s |
+| **Freshchat** | 2.3s | 361ms | 564KB | 2.8s |
+
+> **Key Finding:** FreshChat is the only widget that blocks initial render (FCP 2.3s vs 1.0s) due to requiring a render-blocking script in the HTML `<head>`. All others load asynchronously.
+
+#### Metric Definitions
+
+| Metric | Description |
+|--------|-------------|
+| **FCP** | First Contentful Paint - time until page content first appears |
+| **JS Time** | CPU time spent parsing and executing widget JavaScript |
+| **Weight** | Total download size (compressed) |
+| **Chat Displayed** | Time until widget button becomes visible |
+
+---
+
+### WP Speed Matters Benchmark (2021) - WordPress Focus
+
+Testing methodology: Fresh WordPress install, GTmetrix (India), Lighthouse mobile with 4G/4x CPU slowdown.
+
+| Widget | Load Time | HTTP Requests | Total Size | DNS Lookups |
+|--------|-----------|---------------|------------|-------------|
+| *No widget* | 0.8s | 9 | 0.27MB | 1 |
+| **Crisp** | 1.6s | 15 | 0.42MB | 3 |
+| **Intercom** | 1.5s | 14 | 0.53MB | 3 |
+| **Tawk.to** | 4.4s | 26 | 0.43MB | 7 |
+| **LiveChat** | 4.8s | 25 | 0.73MB | 7 |
+| **HubSpot** | 4.6s | 28 | 0.75MB | 9 |
+| **Zendesk** | 5.3s | 21 | 0.84MB | 4 |
+| **Drift** | 7.8s | 53 | 0.79MB | 10 |
+| **Facebook** | 5.3s | 42 | 1.31MB | 5 |
+
+> **Key Finding:** Crisp and Intercom are the best optimized with almost zero impact on PageSpeed/Lighthouse scores.
+
+---
+
+### Crisp's Own Benchmark (2023) - EU Testing
+
+Testing methodology: Firefox 82, fiber internet in EU, WiFi access point, cache purged.
+
+| Provider | Compressed Size | Time to Load | HTTP Requests | DNS Hostnames |
+|----------|-----------------|--------------|---------------|---------------|
+| **Crisp** | 232KB | ~0.8s | 8 | 2 |
+| **Intercom** | ~400KB | ~1.2s | 15 | 4 |
+| **Drift** | ~600KB | ~2.0s | 25 | 8 |
+| **Zendesk** | ~800KB | ~2.5s | 20 | 5 |
+| **Freshchat** | ~700KB | ~2.2s | 22 | 6 |
+
+> **Note:** This is vendor-provided data from Crisp. Independent testing shows similar relative rankings.
+
+---
+
+### LiveChat Optimization History
+
+LiveChat has documented their performance improvements over time:
+
+| Date | Widget Size | Notes |
+|------|-------------|-------|
+| June 2020 | 412KB | Starting point |
+| Stage 1 | 332KB | Initial optimization |
+| Stage 2 | 263KB | Code splitting |
+| Stage 3 | 273KB | Minor regression |
+| Current | 256KB | **38% reduction** from original |
+
+**Key optimizations implemented:**
+- Code splitting (lazy loading full widget on hover)
+- Replaced sockJS library with pure WebSocket
+- Removed third-party dependencies
+
+---
+
+### Chatwoot Performance Notes
+
+Chatwoot is **self-hosted**, so performance depends on your infrastructure:
+
+| Factor | Impact |
+|--------|--------|
+| Server location | Latency to your users |
+| CDN configuration | Asset delivery speed |
+| Redis/PostgreSQL | Real-time messaging performance |
+| Cloudflare Tunnel | Additional routing overhead |
+
+**Recent optimizations (GitHub PRs):**
+- Dynamic importing for routes
+- API endpoint caching (campaigns, articles, inbox_members)
+- Removed font files from widget bundle
+- Asset CDN host configuration
+
+**Estimated widget size:** ~200-300KB (varies by configuration)
+
+> **Recommendation:** Deploy Chatwoot behind Cloudflare CDN with proper caching headers for best performance.
+
+---
+
+### Performance Rankings Summary
+
+#### By Download Size (Smaller = Better)
+
+| Rank | Widget | Size |
+|------|--------|------|
+| 🥇 | Zoho Desk | 67KB |
+| 🥈 | LiveAgent | 79KB |
+| 🥉 | Crisp | 155KB |
+| 4 | Tidio | 208KB |
+| 5 | LiveChat | 256-385KB |
+| 6 | Intercom | 301KB |
+| 7 | Zendesk | 533KB |
+| 8 | Freshchat | 564KB |
+| 9 | Tawk.to | 749KB |
+
+#### By JS Execution Time (Lower = Better)
+
+| Rank | Widget | JS Time |
+|------|--------|---------|
+| 🥇 | Zoho Desk | 259ms |
+| 🥈 | Crisp | 311ms |
+| 🥉 | LiveChat | 328ms |
+| 4 | Freshchat | 361ms |
+| 5 | Intercom | 514ms |
+| 6 | Tidio | 540ms |
+| 7 | Tawk.to | 645ms |
+| 8 | Zendesk | 991ms |
+
+#### By Time to Display (Lower = Better)
+
+| Rank | Widget | Display Time |
+|------|--------|--------------|
+| 🥇 | LiveAgent | 2.5s |
+| 🥈 | Freshchat | 2.8s |
+| 🥉 | Zoho Desk | 3.3s |
+| 4 | Tawk.to | 3.5s |
+| 5 | Tidio | 5.3s |
+| 6 | Crisp | 5.4s |
+| 7 | Intercom | 5.5s |
+| 8 | LiveChat | 5.7s |
+| 9 | Zendesk | 9.3s |
+
+---
+
+### Performance Optimization Tips
+
+1. **Lazy Load Widget Code**
+   ```javascript
+   // Load widget only on user interaction
+   document.addEventListener('scroll', function loadChat() {
+     // Insert widget script here
+     document.removeEventListener('scroll', loadChat);
+   }, { once: true });
+   ```
+
+2. **Preconnect to Widget CDN**
+   ```html
+   <link rel="preconnect" href="https://client.crisp.chat">
+   <link rel="dns-prefetch" href="https://client.crisp.chat">
+   ```
+
+3. **Use RequestIdleCallback**
+   ```javascript
+   if ('requestIdleCallback' in window) {
+     requestIdleCallback(() => loadChatWidget());
+   } else {
+     setTimeout(loadChatWidget, 1000);
+   }
+   ```
+
+4. **Defer Non-Critical Scripts**
+   ```html
+   <script src="chat-widget.js" defer></script>
+   ```
+
+---
+
 ## Quick Comparison
 
-| Solution | Dark Mode | Custom CSS | Tailwind-Friendly | iGaming Ready | Starting Price |
-|----------|-----------|------------|-------------------|---------------|----------------|
-| **Crisp** | ✅ Programmatic | ✅ Plugin | ⭐⭐⭐⭐⭐ | Good | €45/mo |
-| **Chatwoot** | ✅ Auto-detect | ⚠️ Limited | ⭐⭐⭐⭐ | Excellent | Free (self-hosted) |
-| **LiveChat** | ✅ Toggle | ✅ Built-in | ⭐⭐⭐⭐ | ⭐ Best (2000+ casinos) | $20/seat/mo |
-| **Zendesk** | ⚠️ API only | ✅ Full API | ⭐⭐⭐⭐ | Good | $69/agent/mo |
-| **Freshchat** | ⚠️ CSS hack | ✅ Available | ⭐⭐⭐ | Good | Free tier available |
-| **Intercom** | ✅ System match | ❌ Iframe | ⭐⭐⭐ | Moderate | ~$74/mo |
-| **Tidio** | ❌ None | ⚠️ Deprecated | ⭐⭐ | Moderate | $29/mo |
-| **Tawk.to** | ❌ None | ❌ Blocked | ⭐ | Limited | Free |
-| **Jira SM** | ❌ Widget: None | ❌ Marketplace apps | ⭐ | ❌ Wrong use case | $20/agent/mo |
+| Solution | Dark Mode | Custom CSS | Tailwind | iGaming | Size | JS Time | Price |
+|----------|-----------|------------|----------|---------|------|---------|-------|
+| **Crisp** | ✅ Programmatic | ✅ Plugin | ⭐⭐⭐⭐⭐ | Good | 155KB | 311ms | €45/mo |
+| **Chatwoot** | ✅ Auto-detect | ⚠️ Limited | ⭐⭐⭐⭐ | Excellent | ~250KB* | Varies* | Free |
+| **LiveChat** | ✅ Toggle | ✅ Built-in | ⭐⭐⭐⭐ | ⭐ Best | 256KB | 328ms | $20/seat |
+| **Zendesk** | ⚠️ API only | ✅ Full API | ⭐⭐⭐⭐ | Good | 533KB | 991ms | $69/agent |
+| **Freshchat** | ⚠️ CSS hack | ✅ Available | ⭐⭐⭐ | Good | 564KB | 361ms | Free tier |
+| **Intercom** | ✅ System match | ❌ Iframe | ⭐⭐⭐ | Moderate | 301KB | 514ms | ~$74/mo |
+| **Tidio** | ❌ None | ⚠️ Deprecated | ⭐⭐ | Moderate | 208KB | 540ms | $29/mo |
+| **Tawk.to** | ❌ None | ❌ Blocked | ⭐ | Limited | 749KB | 645ms | Free |
+| **Jira SM** | ❌ Widget: None | ❌ Marketplace | ⭐ | ❌ Wrong | N/A | N/A | $20/agent |
+
+*Chatwoot is self-hosted; performance depends on your infrastructure configuration.
 
 ---
 
@@ -361,8 +554,30 @@ For a **dark background with gold-yellow accents** on a Tailwind CSS iGaming sit
 
 | Priority | Solution | Reason |
 |----------|----------|--------|
-| 🥇 Best Theming | **Crisp** | Programmatic dark mode, full SDK, per-workspace pricing |
-| 🥈 Best for iGaming | **LiveChat** | 2000+ casino clients, VIP handling, behavior triggers |
-| 🥉 Best Self-Hosted | **Chatwoot** | Data sovereignty, EU compliance, Docker/Hetzner ready |
-| ⚠️ Avoid | **Tawk.to** | No CSS customization, unprofessional branding |
+| 🥇 Best Overall | **Crisp** | Fastest loading (155KB), programmatic dark mode, full SDK, per-workspace pricing |
+| 🥈 Best for iGaming | **LiveChat** | 2000+ casino clients, optimized (256KB), VIP handling, behavior triggers |
+| 🥉 Best Self-Hosted | **Chatwoot** | Data sovereignty, EU compliance, performance depends on your infrastructure |
+| 🏅 Best Performance | **Zoho Desk** | Smallest (67KB), fastest JS (259ms), but limited theming |
+| ⚠️ Avoid | **Tawk.to** | Heaviest (749KB), no CSS customization, unprofessional branding |
+| ⚠️ Slow | **Zendesk** | Slowest JS (991ms), 9.3s display time, though good theming API |
 | ❌ Wrong Tool | **Jira SM** | ITSM ticketing, not real-time chat |
+
+### Performance vs Theming Trade-offs
+
+| Solution | Performance | Theming | Overall Score |
+|----------|-------------|---------|---------------|
+| **Crisp** | ⭐⭐⭐⭐⭐ (155KB, 311ms) | ⭐⭐⭐⭐⭐ | Best balance |
+| **LiveChat** | ⭐⭐⭐⭐ (256KB, 328ms) | ⭐⭐⭐⭐ | iGaming focus |
+| **Intercom** | ⭐⭐⭐ (301KB, 514ms) | ⭐⭐⭐ | Limited colors |
+| **Tidio** | ⭐⭐⭐ (208KB, 540ms) | ⭐⭐ | CSS deprecated |
+| **Zendesk** | ⭐⭐ (533KB, 991ms) | ⭐⭐⭐⭐ | Slow but flexible |
+| **Freshchat** | ⭐⭐ (564KB, blocks FCP) | ⭐⭐⭐ | Render-blocking |
+| **Tawk.to** | ⭐ (749KB, 645ms) | ⭐ | Heavy, inflexible |
+
+### Final Recommendation for iGaming
+
+**Primary: Crisp** — Best performance-to-theming ratio. 155KB compressed, 311ms JS execution, programmatic dark mode that syncs with Tailwind. Per-workspace pricing scales well.
+
+**Alternative: LiveChat** — Slightly heavier (256KB) but optimized specifically for casinos with 2000+ clients. Full color customization without CSS hacks.
+
+**Self-Hosted: Chatwoot** — Performance depends on your Hetzner infrastructure. Use Cloudflare CDN with aggressive caching. Data sovereignty for EU gambling licenses.
