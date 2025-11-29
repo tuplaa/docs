@@ -28,6 +28,11 @@ const sidebars: SidebarsConfig = {
           id: 'openapis/pam',
           label: 'PAM',
         },
+        {
+          type: 'doc',
+          id: 'openapis/bopam',
+          label: 'BO PAM',
+        },
       ],
     },
     {
@@ -60,6 +65,16 @@ const sidebars: SidebarsConfig = {
           type: 'doc',
           id: 'discovery/livechat_rd',
           label: 'Livechat R&D',
+        },
+        {
+          type: 'doc',
+          id: 'discovery/design_system_guidelines',
+          label: 'Design System Guidelines',
+        },
+        {
+          type: 'doc',
+          id: 'discovery/web_usecases',
+          label: 'Web Use Cases',
         },
       ],
     },
